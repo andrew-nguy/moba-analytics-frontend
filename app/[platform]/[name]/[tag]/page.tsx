@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from 'react';
 import { getAccount, getSummoner, getRanked, getMatchIds, getMatch } from '@/lib/api';
+import SearchBar from '@/components/SearchBar';
 
 export default function ProfilePage({ params }: { params: Promise<{ platform: string; name: string; tag: string }> }) {
   const { platform, name, tag } = use(params);
@@ -57,6 +58,8 @@ export default function ProfilePage({ params }: { params: Promise<{ platform: st
   return (
     <main className="min-h-screen bg-[#0f1117] text-white">
       <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col gap-6">
+            <SearchBar defaultPlatform={platform} defaultValue={`${name}#${tag}`} />
+
         {/* Summoner Header */}
         <div className="flex items-center gap-4 bg-[#1a1d27] rounded-xl p-6 border border-[#2a2d3a]">
           <img
