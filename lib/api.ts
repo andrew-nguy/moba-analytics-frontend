@@ -1,10 +1,17 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export class ApiError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
 async function fetchFromApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_URL}${endpoint}`);
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.message || 'Something went wrong');
+    throw new ApiError(res.status, error.message || 'Something went wrong');
   }
   return res.json();
 }
