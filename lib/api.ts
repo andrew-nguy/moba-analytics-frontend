@@ -7,6 +7,25 @@ export class ApiError extends Error {
   }
 }
 
+export interface RecentMatchSummaryBreakdown {
+  name: string;
+  games: number;
+  wins: number;
+  winRatePercent: number;
+}
+
+export interface RecentMatchSummary {
+  gamesAnalyzed: number;
+  wins: number;
+  losses: number;
+  winRatePercent: number;
+  kdaRatio: number;
+  champions: RecentMatchSummaryBreakdown[];
+  roles: RecentMatchSummaryBreakdown[];
+  summary: string;
+  summaryGenerated: boolean;
+}
+
 async function fetchFromApi<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_URL}${endpoint}`);
   if (!res.ok) {
@@ -44,4 +63,9 @@ export function getMatch(matchId: string, platform: string) {
   return fetchFromApi<any>(
     `/api/match?matchId=${matchId}&platform=${platform}`
   );
+}
+
+export function getRecentMatchSummary(puuid: string, platform: string) {
+  const params = new URLSearchParams({ puuid, platform });
+  return fetchFromApi<RecentMatchSummary>(`/api/summary?${params.toString()}`);
 }
